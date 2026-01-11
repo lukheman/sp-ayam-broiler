@@ -519,15 +519,19 @@
 </head>
 <body>
     <!-- Sidebar -->
-    <x-admin.sidebar :brand-name="$brandName" :brand-icon="$brandIcon">
-        <x-admin.sidebar-section title="Main">
-            <x-admin.sidebar-link href="{{ route('dashboard') }}" icon="fas fa-home">Dashboard</x-admin.sidebar-link>
-            <x-admin.sidebar-link href="{{ route('admin.users') }}" icon="fas fa-users" :active="request()->routeIs('admin.users')">Users</x-admin.sidebar-link>
+    <x-admin.sidebar :brand-name="'SP Ayam Broiler'" :brand-icon="'fas fa-home'">
+
+        <x-admin.sidebar-section title="UTAMA">
+            <x-admin.sidebar-link href="{{  route('dashboard') }}" icon="fas fa-home" :active="true">Dashboard</x-admin.sidebar-link>
         </x-admin.sidebar-section>
 
-        <x-admin.sidebar-section title="Settings">
-            <x-admin.sidebar-link href="#settings" icon="fas fa-cog">Settings</x-admin.sidebar-link>
+        <x-admin.sidebar-section title="PENGELOLA">
+            <x-admin.sidebar-link href="{{ route('admin.users') }}" icon="fas fa-users">Pengguna</x-admin.sidebar-link>
+            <x-admin.sidebar-link href="{{ route('admin.penyakit') }}" icon="fas fa-virus">Penyakit</x-admin.sidebar-link>
+            <x-admin.sidebar-link href="{{ route('admin.gejala') }}" icon="fas fa-notes-medical">Gejala</x-admin.sidebar-link>
+            <x-admin.sidebar-link href="{{ route('admin.basis-pengetahuan') }}" icon="fas fa-brain">Basis Pengetahuan</x-admin.sidebar-link>
         </x-admin.sidebar-section>
+
     </x-admin.sidebar>
 
     <!-- Main Content -->

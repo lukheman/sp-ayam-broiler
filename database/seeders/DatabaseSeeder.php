@@ -16,9 +16,15 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Admin',
+            'nama' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => 'password123'
+        ]);
+
+        $this->call([
+            PenyakitSeeder::class,
+            GejalaSeeder::class,
+            BasisPengetahuanSeeder::class
         ]);
     }
 }

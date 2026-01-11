@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'nama',
         'email',
+        'photo',
         'password',
     ];
 
@@ -52,10 +53,10 @@ class User extends Authenticatable
      */
     public function initials(): string
     {
-        return Str::of($this->name)
+        return Str::of($this->nama)
             ->explode(' ')
             ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->map(fn($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
 }

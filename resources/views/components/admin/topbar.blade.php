@@ -3,7 +3,6 @@
     'userRole' => 'Administrator',
     'userInitials' => null,
     'notificationCount' => 0,
-    'searchPlaceholder' => 'Search anything...',
     'showLogout' => true,
     'showThemeToggle' => true
 ])
@@ -23,15 +22,6 @@
 
 <div class="topbar">
     <div class="d-flex align-items-center">
-        <button class="btn btn-link mobile-toggle me-3" onclick="toggleSidebar()">
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="input-group" style="max-width: 400px;">
-            <span class="input-group-text bg-white border-end-0">
-                <i class="fas fa-search text-muted"></i>
-            </span>
-            <input type="text" class="form-control border-start-0" placeholder="{{ $searchPlaceholder }}">
-        </div>
     </div>
     <div class="d-flex align-items-center gap-3">
         @if($showThemeToggle)
@@ -39,17 +29,13 @@
                 <i id="theme-icon" class="fas fa-moon"></i>
             </button>
         @endif
-        <button class="btn btn-link position-relative">
-            <i class="fas fa-bell" style="color: var(--text-secondary); font-size: 1.25rem;"></i>
-            @if($notificationCount > 0)
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">{{ $notificationCount }}</span>
-            @endif
-        </button>
-        <div class="user-avatar">{{ $initials }}</div>
-        <div class="d-none d-md-block">
-            <div class="fw-semibold user-name">{{ $userName }}</div>
-            <small class="user-role">{{ $userRole }}</small>
-        </div>
+        <a href="{{ route('admin.profile') }}" class="d-flex align-items-center gap-2 text-decoration-none" title="Profil Pengguna">
+            <div class="user-avatar">{{ $initials }}</div>
+            <div class="d-none d-md-block">
+                <div class="fw-semibold user-name">{{ $userName }}</div>
+                <small class="user-role">{{ $userRole }}</small>
+            </div>
+        </a>
         @if($showLogout)
             <form method="POST" action="{{ route('logout') }}" class="d-inline">
                 @csrf

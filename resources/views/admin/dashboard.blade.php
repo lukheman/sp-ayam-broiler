@@ -3,19 +3,17 @@
     <x-slot:sidebar>
         <x-admin.sidebar-section title="Main">
             <x-admin.sidebar-link href="#dashboard" icon="fas fa-home" :active="true">Dashboard</x-admin.sidebar-link>
-            <x-admin.sidebar-link href="#components" icon="fas fa-cube">Components</x-admin.sidebar-link>
-            <x-admin.sidebar-link href="#analytics" icon="fas fa-chart-line">Analytics</x-admin.sidebar-link>
         </x-admin.sidebar-section>
 
         <x-admin.sidebar-section title="Management">
-            <x-admin.sidebar-link href="#users" icon="fas fa-users">Users</x-admin.sidebar-link>
-            <x-admin.sidebar-link href="#products" icon="fas fa-shopping-cart">Products</x-admin.sidebar-link>
-            <x-admin.sidebar-link href="#orders" icon="fas fa-file-invoice">Orders</x-admin.sidebar-link>
+            <x-admin.sidebar-link href="{{ route('admin.users') }}" icon="fas fa-users">Pengguna</x-admin.sidebar-link>
+            <x-admin.sidebar-link href="#penyakit" icon="fas fa-disease">Penyakit</x-admin.sidebar-link>
+            <x-admin.sidebar-link href="#gejala" icon="fas fa-virus">Gejala</x-admin.sidebar-link>
+            <x-admin.sidebar-link href="#basis-pengetahuan" icon="fas fa-brain">Basis Pengetahuan</x-admin.sidebar-link>
         </x-admin.sidebar-section>
 
         <x-admin.sidebar-section title="Settings">
             <x-admin.sidebar-link href="#settings" icon="fas fa-cog">Settings</x-admin.sidebar-link>
-            <x-admin.sidebar-link href="#help" icon="fas fa-question-circle">Help Center</x-admin.sidebar-link>
         </x-admin.sidebar-section>
     </x-slot:sidebar>
 

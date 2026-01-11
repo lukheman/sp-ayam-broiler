@@ -54,7 +54,7 @@
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="user-avatar">{{ $user->initials() }}</div>
                                     <div>
-                                        <div class="fw-semibold" style="color: var(--text-primary);">{{ $user->name }}</div>
+                                        <div class="fw-semibold" style="color: var(--text-primary);">{{ $user->nama }}</div>
                                         <small class="text-muted">ID: {{ $user->id }}</small>
                                     </div>
                                 </div>
@@ -118,10 +118,10 @@
 
                 <form wire:submit="save">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name <span style="color: var(--danger-color);">*</span></label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                            wire:model="name" placeholder="Enter full name">
-                        @error('name')
+                        <label for="nama" class="form-label">Nama <span style="color: var(--danger-color);">*</span></label>
+                        <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama"
+                            wire:model="nama" placeholder="Enter full name">
+                        @error('nama')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

@@ -22,7 +22,7 @@ class UserManagement extends Component
     public string $search = '';
 
     // Form fields
-    public string $name = '';
+    public string $nama = '';
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
@@ -36,7 +36,7 @@ class UserManagement extends Component
     protected function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
         ];
 
@@ -69,7 +69,7 @@ class UserManagement extends Component
     {
         $user = User::findOrFail($userId);
         $this->editingUserId = $userId;
-        $this->name = $user->name;
+        $this->nama = $user->nama;
         $this->email = $user->email;
         $this->password = '';
         $this->password_confirmation = '';
@@ -82,7 +82,7 @@ class UserManagement extends Component
 
         if ($this->editingUserId) {
             $user = User::findOrFail($this->editingUserId);
-            $user->name = $validated['name'];
+            $user->nama = $validated['nama'];
             $user->email = $validated['email'];
 
             if (!empty($this->password)) {
@@ -93,7 +93,7 @@ class UserManagement extends Component
             session()->flash('success', 'User updated successfully.');
         } else {
             User::create([
-                'name' => $validated['name'],
+                'nama' => $validated['nama'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
             ]);
@@ -135,7 +135,7 @@ class UserManagement extends Component
 
     protected function resetForm(): void
     {
-        $this->name = '';
+        $this->nama = '';
         $this->email = '';
         $this->password = '';
         $this->password_confirmation = '';
@@ -146,7 +146,7 @@ class UserManagement extends Component
     {
         $users = User::query()
             ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
+                $query->where('nama', 'like', '%' . $this->search . '%')
                     ->orWhere('email', 'like', '%' . $this->search . '%');
             })
             ->orderBy('created_at', 'desc')
