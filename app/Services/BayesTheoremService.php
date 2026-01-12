@@ -6,6 +6,7 @@ use App\Models\BasisPengetahuan;
 use App\Models\Gejala;
 use App\Models\Penyakit;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class BayesTheoremService
 {
@@ -300,9 +301,14 @@ class BayesTheoremService
 
     /**
      * Mendapatkan semua gejala untuk ditampilkan ke user
+     * Cache selama 60 menit karena data gejala jarang berubah
      */
     public function getAllGejala(): Collection
     {
-        return Gejala::orderBy('kode_gejala', 'asc')->get();
+        return Cache::remember('all_gejala', 3600, function () {
+            return Gejala::select('id', 'kode_gejala', 'nama_gejala')
+                ->orderBy('kode_gejala', 'asc')
+                ->get();
+        });
     }
 }

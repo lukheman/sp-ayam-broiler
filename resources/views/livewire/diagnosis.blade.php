@@ -119,7 +119,7 @@
                     <div class="symptoms-grid">
                         @forelse($gejalaList as $gejala)
                             <label class="symptom-item {{ in_array($gejala->id, $selectedGejala) ? 'selected' : '' }}">
-                                <input type="checkbox" wire:model.live="selectedGejala" value="{{ $gejala->id }}"
+                                <input type="checkbox" wire:model="selectedGejala" value="{{ $gejala->id }}"
                                     class="symptom-checkbox">
                                 <span class="symptom-code">{{ $gejala->kode_gejala }}</span>
                                 <span class="symptom-name">{{ $gejala->nama_gejala }}</span>

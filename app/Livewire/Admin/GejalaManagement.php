@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Gejala;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -79,6 +80,9 @@ class GejalaManagement extends Component
             session()->flash('success', 'Gejala berhasil ditambahkan.');
         }
 
+        // Clear gejala cache
+        Cache::forget('all_gejala');
+
         $this->closeModal();
     }
 
@@ -99,6 +103,7 @@ class GejalaManagement extends Component
     {
         if ($this->deletingId) {
             Gejala::destroy($this->deletingId);
+            Cache::forget('all_gejala');
             session()->flash('success', 'Gejala berhasil dihapus.');
         }
 

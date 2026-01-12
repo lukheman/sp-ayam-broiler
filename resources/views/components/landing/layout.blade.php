@@ -7,6 +7,13 @@
     <meta name="description"
         content="SP Ayam Broiler - Sistem Pakar untuk Diagnosa Penyakit Ayam Broiler dengan metode Forward Chaining">
     <title>{{ $title ?? 'SP Ayam Broiler - Sistem Pakar Diagnosa Penyakit Ayam Broiler' }}</title>
+
+    {{-- Preconnect for faster CDN connections --}}
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -745,7 +752,7 @@
 
     {{ $slot }}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" defer></script>
     <script>
         // Navbar scroll effect
         window.addEventListener('scroll', function () {
