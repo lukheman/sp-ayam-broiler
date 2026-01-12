@@ -19,6 +19,8 @@ class Diagnosis extends Component
     public array $results = [];
     public bool $showResults = false;
     public ?array $topResult = null;
+    public array $calculationSteps = [];
+    public ?array $calculationSummary = null;
 
     protected BayesTheoremService $bayesService;
 
@@ -40,25 +42,37 @@ class Diagnosis extends Component
         $gejalaIds = array_map('intval', $this->selectedGejala);
 
         // Get diagnosis results using Bayes Theorem
-        $diagnosisResults = $this->bayesService->diagnose($gejalaIds);
+        $diagnosisData = $this->bayesService->diagnose($gejalaIds);
+        $diagnosisResults = $diagnosisData['results'];
 
         if ($diagnosisResults->isEmpty()) {
             $this->results = [];
             $this->topResult = null;
+            $this->calculationSteps = [];
+            $this->calculationSummary = null;
             $this->showResults = true;
             return;
         }
 
         // Convert to array for Livewire
         $this->results = $diagnosisResults->map(function ($result) {
+            $matchedGejala = $result['matched_gejala'];
+            // Ensure it's an array
+            if ($matchedGejala instanceof \Illuminate\Support\Collection) {
+                $matchedGejala = $matchedGejala->toArray();
+            }
             return [
                 'penyakit' => $result['penyakit'],
                 'percentage' => $result['percentage'],
-                'probability' => $result['probability'],
-                'matched_gejala' => $result['matched_gejala'],
-                'matched_count' => count($result['matched_gejala']),
+                'bayes_value' => $result['bayes_value'],
+                'matched_gejala' => $matchedGejala,
+                'matched_count' => is_countable($matchedGejala) ? count($matchedGejala) : 0,
             ];
         })->toArray();
+
+        // Store calculation details
+        $this->calculationSteps = $diagnosisData['calculation_steps'];
+        $this->calculationSummary = $diagnosisData['summary'];
 
         $this->topResult = $this->results[0] ?? null;
         $this->showResults = true;
@@ -115,6 +129,8 @@ class Diagnosis extends Component
         $this->selectedGejala = [];
         $this->results = [];
         $this->topResult = null;
+        $this->calculationSteps = [];
+        $this->calculationSummary = null;
         $this->showResults = false;
     }
 
