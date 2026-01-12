@@ -15,6 +15,10 @@ use Livewire\Component;
 #[Title('Diagnosa Penyakit - SP Ayam Broiler')]
 class Diagnosis extends Component
 {
+    // User input
+    public string $nama = '';
+    public int $currentStep = 1; // 1 = nama input, 2 = gejala selection, 3 = results
+
     public array $selectedGejala = [];
     public array $results = [];
     public bool $showResults = false;
@@ -27,6 +31,30 @@ class Diagnosis extends Component
     public function boot(BayesTheoremService $bayesService): void
     {
         $this->bayesService = $bayesService;
+    }
+
+    /**
+     * Proceed to symptom selection step after entering name
+     */
+    public function proceedToSymptoms(): void
+    {
+        $this->validate([
+            'nama' => ['required', 'string', 'min:2', 'max:100'],
+        ], [
+            'nama.required' => 'Nama wajib diisi.',
+            'nama.min' => 'Nama minimal 2 karakter.',
+            'nama.max' => 'Nama maksimal 100 karakter.',
+        ]);
+
+        $this->currentStep = 2;
+    }
+
+    /**
+     * Go back to name input step
+     */
+    public function backToNameInput(): void
+    {
+        $this->currentStep = 1;
     }
 
     /**
@@ -90,13 +118,13 @@ class Diagnosis extends Component
             return;
         }
 
-        // Get user name or use 'Tamu' for guest
-        $nama = Auth::check() ? Auth::user()->nama : 'Tamu';
+        // Use the name provided by user
+        $namaUser = $this->nama ?: (Auth::check() ? Auth::user()->nama : 'Tamu');
 
         // Create riwayat diagnosa record
         $riwayat = RiwayatDiagnosa::create([
             'tanggal' => now()->toDateString(),
-            'nama' => $nama,
+            'nama' => $namaUser,
             'id_penyakit' => $this->topResult['penyakit']->id,
         ]);
 
@@ -132,6 +160,22 @@ class Diagnosis extends Component
         $this->calculationSteps = [];
         $this->calculationSummary = null;
         $this->showResults = false;
+        $this->currentStep = 2; // Go back to symptom selection, keep the name
+    }
+
+    /**
+     * Start over completely (including name)
+     */
+    public function startOver(): void
+    {
+        $this->nama = '';
+        $this->selectedGejala = [];
+        $this->results = [];
+        $this->topResult = null;
+        $this->calculationSteps = [];
+        $this->calculationSummary = null;
+        $this->showResults = false;
+        $this->currentStep = 1;
     }
 
     public function render()

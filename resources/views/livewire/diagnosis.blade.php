@@ -54,8 +54,57 @@
                 </p>
             </div>
 
-            @if(!$showResults)
-                <!-- Symptom Selection -->
+            @if($currentStep === 1)
+                {{-- Step 1: Name Input --}}
+                <div class="diagnosis-card">
+                    <div class="card-header-custom">
+                        <div class="card-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h3 class="card-title-custom">Masukkan Nama Anda</h3>
+                            <p class="card-subtitle">Langkah 1 dari 2</p>
+                        </div>
+                    </div>
+
+                    <div class="name-input-section">
+                        <form wire:submit="proceedToSymptoms">
+                            <div class="form-group-custom">
+                                <label for="nama" class="form-label-custom">
+                                    <i class="fas fa-signature me-2"></i>Nama Lengkap
+                                </label>
+                                <input type="text" id="nama" wire:model="nama"
+                                    class="form-input-custom @error('nama') is-invalid @enderror"
+                                    placeholder="Masukkan nama Anda..." autofocus>
+                                @error('nama')
+                                    <div class="error-message">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="card-footer-custom">
+                                <div class="step-indicator">
+                                    <span class="step active">1</span>
+                                    <span class="step-line"></span>
+                                    <span class="step">2</span>
+                                </div>
+                                <button type="submit" class="btn-diagnose">
+                                    <span wire:loading.remove wire:target="proceedToSymptoms">
+                                        Lanjutkan
+                                        <i class="fas fa-arrow-right ms-2"></i>
+                                    </span>
+                                    <span wire:loading wire:target="proceedToSymptoms">
+                                        <i class="fas fa-spinner fa-spin me-2"></i>
+                                        Memproses...
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @elseif($currentStep === 2 && !$showResults)
+                {{-- Step 2: Symptom Selection --}}
                 <div class="diagnosis-card">
                     <div class="card-header-custom">
                         <div class="card-icon">
@@ -63,7 +112,7 @@
                         </div>
                         <div>
                             <h3 class="card-title-custom">Pilih Gejala</h3>
-                            <p class="card-subtitle">Centang gejala yang terlihat pada ayam</p>
+                            <p class="card-subtitle">Langkah 2 dari 2 — Halo, <strong>{{ $nama }}</strong></p>
                         </div>
                     </div>
 
@@ -87,9 +136,14 @@
                     </div>
 
                     <div class="card-footer-custom">
-                        <div class="selected-count">
-                            <i class="fas fa-check-circle"></i>
-                            <span>{{ count($selectedGejala) }} gejala dipilih</span>
+                        <div class="d-flex align-items-center gap-3">
+                            <button wire:click="backToNameInput" class="btn-back">
+                                <i class="fas fa-arrow-left me-2"></i>Kembali
+                            </button>
+                            <div class="selected-count">
+                                <i class="fas fa-check-circle"></i>
+                                <span>{{ count($selectedGejala) }} gejala dipilih</span>
+                            </div>
                         </div>
                         <button wire:click="diagnose" class="btn-diagnose" {{ empty($selectedGejala) ? 'disabled' : '' }}>
                             <span wire:loading.remove wire:target="diagnose">
@@ -103,7 +157,7 @@
                         </button>
                     </div>
                 </div>
-            @else
+            @elseif($showResults)
                 <!-- Results Section -->
                 <div class="results-container">
                     <div class="results-header">
@@ -140,8 +194,10 @@
                                     <span>Formula: <code>{{ $calculationSummary['formula_bayes'] }}</code></span>
                                 </div>
                                 <div class="summary-stats">
-                                    <span><i class="fas fa-list-check"></i> {{ $calculationSummary['jumlah_gejala_dipilih'] }} gejala dipilih</span>
-                                    <span><i class="fas fa-virus"></i> {{ $calculationSummary['jumlah_penyakit_kandidat'] }} kandidat penyakit</span>
+                                    <span><i class="fas fa-list-check"></i> {{ $calculationSummary['jumlah_gejala_dipilih'] }}
+                                        gejala dipilih</span>
+                                    <span><i class="fas fa-virus"></i> {{ $calculationSummary['jumlah_penyakit_kandidat'] }}
+                                        kandidat penyakit</span>
                                 </div>
                             </div>
                         @endif
@@ -197,12 +253,13 @@
                                     {{-- Calculation Details Toggle --}}
                                     @if($calculation)
                                         <div class="calc-toggle-section">
-                                            <button class="calc-toggle-btn" onclick="this.parentElement.querySelector('.calc-details').classList.toggle('show'); this.classList.toggle('active');">
+                                            <button class="calc-toggle-btn"
+                                                onclick="this.parentElement.querySelector('.calc-details').classList.toggle('show'); this.classList.toggle('active');">
                                                 <i class="fas fa-calculator me-1"></i>
-                                                <span>Lihat Proses Perhitungan (5 Tahap)</span>
+                                                <span>Lihat Detail Proses Perhitungan</span>
                                                 <i class="fas fa-chevron-down toggle-arrow"></i>
                                             </button>
-                                            
+
                                             <div class="calc-details">
                                                 <div class="calc-steps-wrapper">
                                                     @foreach($calculation['steps'] as $step)
@@ -216,7 +273,7 @@
                                                                 <div class="calc-step-formula">
                                                                     <strong>Formula:</strong> <code>{{ $step['formula'] }}</code>
                                                                 </div>
-                                                                
+
                                                                 {{-- Detail per gejala --}}
                                                                 @if(isset($step['details']) && is_array($step['details']) && count($step['details']) > 0)
                                                                     <div class="calc-details-table">
@@ -257,10 +314,10 @@
                                                                         <strong>Perhitungan:</strong> {{ $step['calculation'] }}
                                                                     </div>
                                                                 @endif
-                                                                
+
                                                                 @if(isset($step['result']) && $step['result'] !== null)
                                                                     <div class="calc-step-result-box">
-                                                                        <strong>Hasil:</strong> 
+                                                                        <strong>Hasil:</strong>
                                                                         <span class="result-value">{{ $step['result'] }}</span>
                                                                         @if(isset($step['percentage']))
                                                                             <span class="calc-percentage-badge">{{ $step['percentage'] }}%</span>
@@ -284,7 +341,8 @@
                                                             </div>
                                                             <div class="conclusion-percentage">
                                                                 <span class="label">Persentase:</span>
-                                                                <span class="percentage-value {{ $calculation['total_bayes_percentage'] >= 70 ? 'high' : ($calculation['total_bayes_percentage'] >= 40 ? 'medium' : 'low') }}">
+                                                                <span
+                                                                    class="percentage-value {{ $calculation['total_bayes_percentage'] >= 70 ? 'high' : ($calculation['total_bayes_percentage'] >= 40 ? 'medium' : 'low') }}">
                                                                     {{ $calculation['total_bayes_percentage'] }}%
                                                                 </span>
                                                             </div>
@@ -504,6 +562,105 @@
         .btn-diagnose:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+
+        /* Name Input Section Styles */
+        .name-input-section {
+            padding: 2rem;
+        }
+
+        .form-group-custom {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label-custom {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+        }
+
+        .form-input-custom {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            color: #1e293b;
+        }
+
+        .form-input-custom:focus {
+            outline: none;
+            border-color: #6366f1;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-input-custom.is-invalid {
+            border-color: #ef4444;
+        }
+
+        .form-input-custom::placeholder {
+            color: #94a3b8;
+        }
+
+        .error-message {
+            margin-top: 0.5rem;
+            color: #ef4444;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-indicator .step {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-indicator .step.active {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+        }
+
+        .step-indicator .step-line {
+            width: 30px;
+            height: 3px;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 2px solid #e2e8f0;
+            color: #64748b;
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+            background: #f0f1ff;
         }
 
         .empty-state {
@@ -1125,7 +1282,9 @@
             margin-bottom: 0.5rem;
         }
 
-        .step-formula, .step-calc, .step-result {
+        .step-formula,
+        .step-calc,
+        .step-result {
             font-size: 0.9rem;
             color: #475569;
             margin-bottom: 0.25rem;

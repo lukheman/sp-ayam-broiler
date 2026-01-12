@@ -502,6 +502,10 @@
             color: var(--danger-color);
         }
 
+        .action-btn-view {
+            color: var(--success-color);
+        }
+
         /* Pagination */
         .pagination {
             --bs-pagination-bg: var(--bg-secondary);
@@ -527,10 +531,11 @@
         </x-admin.sidebar-section>
 
         <x-admin.sidebar-section title="Manajemen">
-            <x-admin.sidebar-link href="{{ route('admin.users') }}" icon="fas fa-users">Pengguna</x-admin.sidebar-link>
+            <!-- <x-admin.sidebar-link href="{{ route('admin.users') }}" icon="fas fa-users">Pengguna</x-admin.sidebar-link> -->
             <x-admin.sidebar-link href="{{ route('admin.penyakit') }}" icon="fas fa-virus">Penyakit</x-admin.sidebar-link>
             <x-admin.sidebar-link href="{{ route('admin.gejala') }}" icon="fas fa-notes-medical">Gejala</x-admin.sidebar-link>
             <x-admin.sidebar-link href="{{ route('admin.basis-pengetahuan') }}" icon="fas fa-brain">Basis Pengetahuan</x-admin.sidebar-link>
+            <x-admin.sidebar-link href="{{ route('admin.riwayat-diagnosis') }}" icon="fas fa-history">Riwayat Diagnosis</x-admin.sidebar-link>
         </x-admin.sidebar-section>
 
     </x-admin.sidebar>
