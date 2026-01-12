@@ -27,6 +27,7 @@ class BasisPengetahuanManagement extends Component
     // Form fields
     public string $id_penyakit = '';
     public array $selected_gejala = [];
+    public array $bobot_gejala = [];
 
     // State
     public ?int $editingId = null;
@@ -42,6 +43,8 @@ class BasisPengetahuanManagement extends Component
             'id_penyakit' => ['required', 'exists:penyakit,id'],
             'selected_gejala' => ['required', 'array', 'min:1'],
             'selected_gejala.*' => ['exists:gejala,id'],
+            'bobot_gejala' => ['array'],
+            'bobot_gejala.*' => ['numeric', 'min:0', 'max:1'],
         ];
     }
 
@@ -74,6 +77,12 @@ class BasisPengetahuanManagement extends Component
         $this->editingId = $penyakitId;
         $this->id_penyakit = (string) $penyakitId;
         $this->selected_gejala = $penyakit->gejala->pluck('id')->toArray();
+
+        // Load bobot for each gejala
+        $this->bobot_gejala = [];
+        foreach ($penyakit->gejala as $gejala) {
+            $this->bobot_gejala[$gejala->id] = (string) $gejala->pivot->bobot;
+        }
         $this->showModal = true;
     }
 
@@ -81,8 +90,10 @@ class BasisPengetahuanManagement extends Component
     {
         if (in_array($gejalaId, $this->selected_gejala)) {
             $this->selected_gejala = array_values(array_diff($this->selected_gejala, [$gejalaId]));
+            unset($this->bobot_gejala[$gejalaId]);
         } else {
             $this->selected_gejala[] = $gejalaId;
+            $this->bobot_gejala[$gejalaId] = '0.00';
         }
     }
 
@@ -95,11 +106,13 @@ class BasisPengetahuanManagement extends Component
         // Delete existing relationships for this penyakit
         BasisPengetahuan::where('id_penyakit', $penyakitId)->delete();
 
-        // Create new relationships
+        // Create new relationships with bobot
         foreach ($this->selected_gejala as $gejalaId) {
+            $bobot = isset($this->bobot_gejala[$gejalaId]) ? (float) $this->bobot_gejala[$gejalaId] : 0.00;
             BasisPengetahuan::create([
                 'id_penyakit' => $penyakitId,
                 'id_gejala' => (int) $gejalaId,
+                'bobot' => $bobot,
             ]);
         }
 
@@ -162,6 +175,7 @@ class BasisPengetahuanManagement extends Component
     {
         $this->id_penyakit = '';
         $this->selected_gejala = [];
+        $this->bobot_gejala = [];
         $this->editingId = null;
     }
 

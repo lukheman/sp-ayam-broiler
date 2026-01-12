@@ -523,9 +523,10 @@
 
         <x-admin.sidebar-section title="UTAMA">
             <x-admin.sidebar-link href="{{  route('dashboard') }}" icon="fas fa-home" :active="true">Dashboard</x-admin.sidebar-link>
+            <x-admin.sidebar-link href="{{ route('diagnosa') }}" icon="fas fa-stethoscope">Diagnosa</x-admin.sidebar-link>
         </x-admin.sidebar-section>
 
-        <x-admin.sidebar-section title="PENGELOLA">
+        <x-admin.sidebar-section title="Manajemen">
             <x-admin.sidebar-link href="{{ route('admin.users') }}" icon="fas fa-users">Pengguna</x-admin.sidebar-link>
             <x-admin.sidebar-link href="{{ route('admin.penyakit') }}" icon="fas fa-virus">Penyakit</x-admin.sidebar-link>
             <x-admin.sidebar-link href="{{ route('admin.gejala') }}" icon="fas fa-notes-medical">Gejala</x-admin.sidebar-link>

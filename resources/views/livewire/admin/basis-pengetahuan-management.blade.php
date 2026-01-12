@@ -59,7 +59,8 @@
                             <td>
                                 <div class="d-flex flex-wrap gap-1">
                                     @foreach($penyakit->gejala->take(5) as $gejala)
-                                        <span class="badge-gejala" title="{{ $gejala->nama_gejala }}">
+                                        <span class="badge-gejala"
+                                            title="{{ $gejala->nama_gejala }} (Bobot: {{ $gejala->pivot->bobot }})">
                                             {{ $gejala->kode_gejala }}
                                         </span>
                                     @endforeach
@@ -71,8 +72,8 @@
                             </td>
                             <td>
                                 <div class="d-flex gap-1">
-                                    <button class="action-btn action-btn-view"
-                                        wire:click="showDetail({{ $penyakit->id }})" title="Lihat detail">
+                                    <button class="action-btn action-btn-view" wire:click="showDetail({{ $penyakit->id }})"
+                                        title="Lihat detail">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                     <button class="action-btn action-btn-edit"
@@ -130,7 +131,8 @@
                             <option value="">-- Pilih Penyakit --</option>
                             @foreach($penyakitList as $penyakit)
                                 <option value="{{ $penyakit->id }}">{{ $penyakit->kode_penyakit }} -
-                                    {{ $penyakit->nama_penyakit }}</option>
+                                    {{ $penyakit->nama_penyakit }}
+                                </option>
                             @endforeach
                         </select>
                         @error('id_penyakit')
@@ -148,14 +150,24 @@
 
                         <div class="gejala-checkbox-container">
                             @foreach($gejalaList as $gejala)
-                                <div class="gejala-checkbox-item {{ in_array($gejala->id, $selected_gejala) ? 'selected' : '' }}"
-                                    wire:click="toggleGejala({{ $gejala->id }})"
-                                    style="cursor: pointer;">
-                                    <span class="gejala-code">{{ $gejala->kode_gejala }}</span>
-                                    <span class="gejala-name">{{ $gejala->nama_gejala }}</span>
-                                    <span class="gejala-check">
-                                        <i class="fas fa-check"></i>
-                                    </span>
+                                <div
+                                    class="gejala-checkbox-item {{ in_array($gejala->id, $selected_gejala) ? 'selected' : '' }}">
+                                    <div class="gejala-main" wire:click="toggleGejala({{ $gejala->id }})"
+                                        style="cursor: pointer; display: flex; align-items: center; gap: 0.75rem; flex: 1;">
+                                        <span class="gejala-code">{{ $gejala->kode_gejala }}</span>
+                                        <span class="gejala-name">{{ $gejala->nama_gejala }}</span>
+                                        <span class="gejala-check">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                    </div>
+                                    @if(in_array($gejala->id, $selected_gejala))
+                                        <div class="bobot-input-wrapper" wire:click.stop>
+                                            <label class="bobot-label">Bobot:</label>
+                                            <input type="number" class="form-control form-control-sm bobot-input"
+                                                wire:model="bobot_gejala.{{ $gejala->id }}" step="0.01" min="0" max="1"
+                                                placeholder="0.00">
+                                        </div>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
@@ -210,7 +222,9 @@
                             <div class="d-flex align-items-center gap-3">
                                 <span class="detail-code">{{ $detailPenyakit->kode_penyakit }}</span>
                                 <div>
-                                    <h5 class="mb-0" style="color: var(--text-primary);">{{ $detailPenyakit->nama_penyakit }}</h5>
+                                    <h5 class="mb-0" style="color: var(--text-primary);">
+                                        {{ $detailPenyakit->nama_penyakit }}
+                                    </h5>
                                     <small class="text-muted">{{ $detailPenyakit->gejala->count() }} gejala terkait</small>
                                 </div>
                             </div>
@@ -225,6 +239,7 @@
                                 <div class="gejala-item">
                                     <span class="gejala-code">{{ $gejala->kode_gejala }}</span>
                                     <span class="gejala-name">{{ $gejala->nama_gejala }}</span>
+                                    <span class="gejala-bobot">Bobot: {{ $gejala->pivot->bobot }}</span>
                                 </div>
                             @empty
                                 <div class="text-muted text-center py-3">
@@ -248,148 +263,179 @@
         </div>
     @endif
 
-<style>
-    .badge-gejala {
-        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-        color: white;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.75rem;
-        font-weight: 600;
-    }
+    <style>
+        .badge-gejala {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
 
-    .badge-more {
-        background: var(--hover-bg);
-        color: var(--text-secondary);
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.75rem;
-    }
+        .badge-more {
+            background: var(--hover-bg);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
 
-    .gejala-checkbox-container {
-        max-height: 300px;
-        overflow-y: auto;
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        padding: 0.5rem;
-    }
+        .gejala-checkbox-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
 
-    .gejala-checkbox-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem;
-        margin-bottom: 0.5rem;
-        background: var(--bg-tertiary);
-        border: 2px solid var(--border-color);
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
+        .gejala-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-    .gejala-checkbox-item:hover {
-        border-color: var(--primary-color);
-        background: var(--hover-bg);
-    }
+        .gejala-checkbox-item:hover {
+            border-color: var(--primary-color);
+            background: var(--hover-bg);
+        }
 
-    .gejala-checkbox-item.selected {
-        border-color: var(--primary-color);
-        background: rgba(99, 102, 241, 0.1);
-    }
+        .gejala-checkbox-item.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
 
-    .gejala-code {
-        background: var(--primary-color);
-        color: white;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        min-width: 40px;
-        text-align: center;
-    }
+        .gejala-code {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: center;
+        }
 
-    .gejala-name {
-        flex: 1;
-        font-size: 0.9rem;
-        color: var(--text-primary);
-    }
+        .gejala-name {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
 
-    .gejala-check {
-        width: 24px;
-        height: 24px;
-        border: 2px solid var(--border-color);
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: transparent;
-        transition: all 0.2s ease;
-    }
+        .gejala-check {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            transition: all 0.2s ease;
+        }
 
-    .gejala-checkbox-item.selected .gejala-check {
-        background: var(--primary-color);
-        border-color: var(--primary-color);
-        color: white;
-    }
+        .gejala-checkbox-item.selected .gejala-check {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
 
-    .action-btn-view {
-        color: var(--secondary-color);
-    }
+        .action-btn-view {
+            color: var(--secondary-color);
+        }
 
-    .action-btn-view:hover {
-        background: rgba(14, 165, 233, 0.1);
-    }
+        .action-btn-view:hover {
+            background: rgba(14, 165, 233, 0.1);
+        }
 
-    .detail-section-title {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 0.75rem;
-    }
+        .detail-section-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+        }
 
-    .detail-card {
-        background: var(--bg-tertiary);
-        border-radius: 12px;
-        padding: 1rem;
-        border: 1px solid var(--border-color);
-    }
+        .detail-card {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+        }
 
-    .detail-code {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 700;
-    }
+        .detail-code {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
 
-    .gejala-list {
-        max-height: 300px;
-        overflow-y: auto;
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
-        padding: 0.5rem;
-    }
+        .gejala-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
 
-    .gejala-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem;
-        margin-bottom: 0.5rem;
-        background: var(--bg-tertiary);
-        border-radius: 8px;
-        transition: all 0.2s ease;
-    }
+        .gejala-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
 
-    .gejala-item:last-child {
-        margin-bottom: 0;
-    }
+        .gejala-item:last-child {
+            margin-bottom: 0;
+        }
 
-    .gejala-item:hover {
-        background: var(--hover-bg);
-    }
-</style>
+        .gejala-item:hover {
+            background: var(--hover-bg);
+        }
+
+        .bobot-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: auto;
+            padding-left: 1rem;
+        }
+
+        .bobot-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .bobot-input {
+            width: 70px;
+            text-align: center;
+            font-size: 0.85rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .gejala-bobot {
+            margin-left: auto;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
 </div>

@@ -1,9 +1,9 @@
 <div>
     {{-- Page Header --}}
-    <x-admin.page-header title="User Management" subtitle="Manage all users in the system">
+    <x-admin.page-header title="Manajemen Pengguna" subtitle="Kelola data pengguna">
         <x-slot:actions>
             <x-admin.button variant="primary" icon="fas fa-plus" wire:click="openCreateModal">
-                Add User
+               Tambah Pengguna
             </x-admin.button>
         </x-slot:actions>
     </x-admin.page-header>
@@ -25,12 +25,12 @@
     <div class="modern-card">
         {{-- Search and Filters --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="mb-0" style="color: var(--text-primary); font-weight: 600;">All Users</h5>
+            <h5 class="mb-0" style="color: var(--text-primary); font-weight: 600;">Semua Pengguna</h5>
             <div class="input-group" style="max-width: 300px;">
                 <span class="input-group-text" style="background: var(--input-bg); border-color: var(--border-color);">
                     <i class="fas fa-search" style="color: var(--text-muted);"></i>
                 </span>
-                <input type="text" class="form-control" placeholder="Search users..."
+                <input type="text" class="form-control" placeholder="Cari pengguna..."
                     wire:model.live.debounce.300ms="search" style="border-left: none;">
             </div>
         </div>
@@ -40,10 +40,9 @@
             <table class="table table-modern">
                 <thead>
                     <tr>
-                        <th>User</th>
+                        <th>Pengguna</th>
                         <th>Email</th>
                         <th>Created</th>
-                        <th>Status</th>
                         <th style="width: 120px;">Actions</th>
                     </tr>
                 </thead>
@@ -55,19 +54,11 @@
                                     <div class="user-avatar">{{ $user->initials() }}</div>
                                     <div>
                                         <div class="fw-semibold" style="color: var(--text-primary);">{{ $user->nama }}</div>
-                                        <small class="text-muted">ID: {{ $user->id }}</small>
                                     </div>
                                 </div>
                             </td>
                             <td style="color: var(--text-secondary);">{{ $user->email }}</td>
                             <td class="text-muted">{{ $user->created_at->format('M d, Y') }}</td>
-                            <td>
-                                @if($user->email_verified_at)
-                                    <x-admin.badge variant="success" icon="fas fa-check-circle">Verified</x-admin.badge>
-                                @else
-                                    <x-admin.badge variant="warning" icon="fas fa-clock">Pending</x-admin.badge>
-                                @endif
-                            </td>
                             <td>
                                 <div class="d-flex gap-1">
                                     <button class="action-btn action-btn-edit" wire:click="openEditModal({{ $user->id }})"
@@ -86,7 +77,7 @@
                             <td colspan="5" class="text-center py-4">
                                 <div class="text-muted">
                                     <i class="fas fa-users mb-2" style="font-size: 2rem;"></i>
-                                    <p class="mb-0">No users found</p>
+                                    <p class="mb-0">Pengguna Tidak Ditemukan</p>
                                 </div>
                             </td>
                         </tr>

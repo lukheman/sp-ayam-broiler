@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\UserManagement;
 use App\Livewire\Admin\UserProfile;
 use App\Livewire\Admin\GejalaManagement;
@@ -22,7 +22,7 @@ Route::get('/diagnosa', Diagnosis::class)->name('diagnosa');
 Route::get('/login', Login::class)->name('login');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/users', UserManagement::class)->name('admin.users');
     Route::get('/gejala', GejalaManagement::class)->name('admin.gejala');
     Route::get('/penyakit', PenyakitManagement::class)->name('admin.penyakit');

@@ -22,11 +22,19 @@
                     <li class="nav-item">
                         <a class="nav-link nav-link-landing" href="{{ route('diagnosa') }}">Diagnosa</a>
                     </li>
+                    @auth
+                    <li class="nav-item ms-2">
+                        <a href="{{ route('dashboard') }}" class="btn btn-nav">
+                            <i class="fas fa-user-shield me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    @else
                     <li class="nav-item ms-2">
                         <a href="{{ route('login') }}" class="btn btn-nav">
                             <i class="fas fa-sign-in-alt me-1"></i> Login
                         </a>
                     </li>
+                    @endauth
                 </ul>
             </div>
         </div>

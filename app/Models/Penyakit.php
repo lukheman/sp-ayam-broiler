@@ -24,6 +24,7 @@ class Penyakit extends Model
     public function gejala(): BelongsToMany
     {
         return $this->belongsToMany(Gejala::class, 'basis_pengetahuan', 'id_penyakit', 'id_gejala')
+            ->withPivot('bobot')
             ->withTimestamps();
     }
 

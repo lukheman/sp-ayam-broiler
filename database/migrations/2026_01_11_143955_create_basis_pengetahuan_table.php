@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('id_penyakit');
             $table->unsignedBigInteger('id_gejala');
+            $table->decimal('bobot', 3, 2)->default(0.00);
             $table->timestamps();
 
             $table->foreign('id_penyakit')->references('id')->on('penyakit')->onDelete('cascade');
