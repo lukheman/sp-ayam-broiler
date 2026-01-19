@@ -55,28 +55,59 @@
             </div>
 
             @if($currentStep === 1)
-                {{-- Step 1: Name Input --}}
+                {{-- Step 1: User Info Input --}}
                 <div class="diagnosis-card">
                     <div class="card-header-custom">
                         <div class="card-icon">
                             <i class="fas fa-user"></i>
                         </div>
                         <div>
-                            <h3 class="card-title-custom">Masukkan Nama Anda</h3>
-                            <p class="card-subtitle">Langkah 1 dari 2</p>
+                            <h3 class="card-title-custom">Data Diri</h3>
+                            <p class="card-subtitle">Langkah 1 dari 2 — Isi data diri Anda</p>
                         </div>
                     </div>
 
                     <div class="name-input-section">
                         <form wire:submit="proceedToSymptoms">
+                            {{-- Nama --}}
                             <div class="form-group-custom">
                                 <label for="nama" class="form-label-custom">
-                                    <i class="fas fa-signature me-2"></i>Nama Lengkap
+                                    <i class="fas fa-user me-2"></i>Nama Lengkap <span class="text-danger">*</span>
                                 </label>
                                 <input type="text" id="nama" wire:model="nama"
                                     class="form-input-custom @error('nama') is-invalid @enderror"
-                                    placeholder="Masukkan nama Anda..." autofocus>
+                                    placeholder="Masukkan nama lengkap Anda...">
                                 @error('nama')
+                                    <div class="error-message">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            {{-- Alamat --}}
+                            <div class="form-group-custom">
+                                <label for="alamat" class="form-label-custom">
+                                    <i class="fas fa-map-marker-alt me-2"></i>Alamat <span class="text-danger">*</span>
+                                </label>
+                                <textarea id="alamat" wire:model="alamat" rows="2"
+                                    class="form-input-custom @error('alamat') is-invalid @enderror"
+                                    placeholder="Masukkan alamat lengkap Anda..."></textarea>
+                                @error('alamat')
+                                    <div class="error-message">
+                                        <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            {{-- Telepon --}}
+                            <div class="form-group-custom">
+                                <label for="telepon" class="form-label-custom">
+                                    <i class="fas fa-phone me-2"></i>Nomor Telepon <span class="text-danger">*</span>
+                                </label>
+                                <input type="tel" id="telepon" wire:model="telepon"
+                                    class="form-input-custom @error('telepon') is-invalid @enderror"
+                                    placeholder="Contoh: 081234567890">
+                                @error('telepon')
                                     <div class="error-message">
                                         <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
                                     </div>
@@ -119,7 +150,7 @@
                     <div class="symptoms-grid">
                         @forelse($gejalaList as $gejala)
                             <label class="symptom-item {{ in_array($gejala->id, $selectedGejala) ? 'selected' : '' }}">
-                                <input type="checkbox" wire:model="selectedGejala" value="{{ $gejala->id }}"
+                                <input type="checkbox" wire:model.live="selectedGejala" value="{{ $gejala->id }}"
                                     class="symptom-checkbox">
                                 <span class="symptom-code">{{ $gejala->kode_gejala }}</span>
                                 <span class="symptom-name">{{ $gejala->nama_gejala }}</span>
@@ -137,7 +168,7 @@
 
                     <div class="card-footer-custom">
                         <div class="d-flex align-items-center gap-3">
-                            <button wire:click="backToNameInput" class="btn-back">
+                            <button wire:click="backToUserInfo" class="btn-back">
                                 <i class="fas fa-arrow-left me-2"></i>Kembali
                             </button>
                             <div class="selected-count">

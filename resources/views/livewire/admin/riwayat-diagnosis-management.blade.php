@@ -1,6 +1,11 @@
 <div>
     {{-- Page Header --}}
     <x-admin.page-header title="Riwayat Diagnosis" subtitle="Lihat riwayat diagnosis penyakit ayam broiler">
+        <x-slot:actions>
+            <a href="{{ route('admin.print.diagnosis-summary') }}" target="_blank" class="btn btn-outline-primary">
+                <i class="fas fa-print me-2"></i>Cetak Semua
+            </a>
+        </x-slot:actions>
     </x-admin.page-header>
 
     {{-- Flash Messages --}}
@@ -37,6 +42,7 @@
                     <tr>
                         <th style="width: 120px;">Tanggal</th>
                         <th>Nama</th>
+                        <th>No Telepon</th>
                         <th>Hasil Diagnosis</th>
                         <th>Jumlah Gejala</th>
                         <th style="width: 120px;">Aksi</th>
@@ -49,6 +55,7 @@
                                 {{ $riwayat->tanggal->format('d/m/Y') }}
                             </td>
                             <td style="color: var(--text-primary);">{{ $riwayat->nama }}</td>
+                            <td style="color: var(--text-primary);">{{ $riwayat->telepon ?? '-' }}</td>
                             <td>
                                 @if ($riwayat->penyakit)
                                     <x-admin.badge variant="danger">{{ $riwayat->penyakit->nama_penyakit }}</x-admin.badge>
@@ -65,6 +72,10 @@
                                         wire:click="openDetailModal({{ $riwayat->id }})" title="Lihat detail">
                                         <i class="fas fa-eye"></i>
                                     </button>
+                                    <a href="{{ route('admin.print.diagnosis', $riwayat->id) }}" target="_blank"
+                                        class="action-btn action-btn-print" title="Cetak laporan">
+                                        <i class="fas fa-print"></i>
+                                    </a>
                                     <button class="action-btn action-btn-delete"
                                         wire:click="confirmDelete({{ $riwayat->id }})" title="Hapus riwayat">
                                         <i class="fas fa-trash-alt"></i>
@@ -74,7 +85,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center py-4">
+                            <td colspan="6" class="text-center py-4">
                                 <div class="text-muted">
                                     <i class="fas fa-history mb-2" style="font-size: 2rem;"></i>
                                     <p class="mb-0">Belum ada riwayat diagnosis</p>
@@ -124,6 +135,21 @@
                         </div>
                     </div>
 
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small mb-1">Alamat</label>
+                            <p class="mb-0" style="color: var(--text-primary); font-weight: 500;">
+                                {{ $selectedRiwayat->alamat ?? '-' }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small mb-1">Telepon</label>
+                            <p class="mb-0" style="color: var(--text-primary); font-weight: 500;">
+                                {{ $selectedRiwayat->telepon ?? '-' }}
+                            </p>
+                        </div>
+                    </div>
+
                     {{-- Hasil Diagnosis --}}
                     <div class="mb-3">
                         <label class="form-label text-muted small mb-1">Hasil Diagnosis</label>
@@ -163,7 +189,11 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{{ route('admin.print.diagnosis', $selectedRiwayat->id) }}" target="_blank"
+                        class="btn btn-outline-primary">
+                        <i class="fas fa-print me-2"></i>Cetak
+                    </a>
                     <x-admin.button type="button" variant="outline" wire:click="closeDetailModal">
                         Tutup
                     </x-admin.button>
@@ -180,4 +210,16 @@
             <i class="fas fa-trash-alt me-2"></i>Hapus Riwayat
         </x-slot:confirmButton>
     </x-admin.confirm-modal>
+
+    {{-- Print Styles --}}
+    <style>
+        .action-btn-print {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .action-btn-print:hover {
+            color: var(--primary-dark);
+        }
+    </style>
 </div>

@@ -17,6 +17,8 @@ class RiwayatDiagnosa extends Model
     protected $fillable = [
         'tanggal',
         'nama',
+        'alamat',
+        'telepon',
         'id_penyakit',
     ];
 

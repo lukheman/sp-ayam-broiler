@@ -31,4 +31,17 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/riwayat-diagnosis', RiwayatDiagnosisManagement::class)->name('admin.riwayat-diagnosis');
     Route::get('/profile', UserProfile::class)->name('admin.profile');
     Route::post('/logout', [LogoutController::class, '__invoke'])->name('logout');
+
+    // Print Routes
+    Route::get('/print/diagnosis/{id}', function ($id) {
+        $riwayat = \App\Models\RiwayatDiagnosa::with(['penyakit', 'gejala'])->findOrFail($id);
+        return view('print.diagnosis-report', compact('riwayat'));
+    })->name('admin.print.diagnosis');
+
+    Route::get('/print/diagnosis-summary', function () {
+        $riwayatList = \App\Models\RiwayatDiagnosa::with(['penyakit', 'gejala'])
+            ->orderBy('tanggal', 'desc')
+            ->get();
+        return view('print.diagnosis-summary', compact('riwayatList'));
+    })->name('admin.print.diagnosis-summary');
 });

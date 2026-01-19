@@ -10,11 +10,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }}</title>
-    
+
     {{-- Preconnect for faster CDN connections --}}
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     @livewireStyles
@@ -540,6 +540,8 @@
             <x-admin.sidebar-link href="{{ route('admin.penyakit') }}" icon="fas fa-virus">Penyakit</x-admin.sidebar-link>
             <x-admin.sidebar-link href="{{ route('admin.gejala') }}" icon="fas fa-notes-medical">Gejala</x-admin.sidebar-link>
             <x-admin.sidebar-link href="{{ route('admin.basis-pengetahuan') }}" icon="fas fa-brain">Basis Pengetahuan</x-admin.sidebar-link>
+        </x-admin.sidebar-section>
+        <x-admin.sidebar-section title="Laporan">
             <x-admin.sidebar-link href="{{ route('admin.riwayat-diagnosis') }}" icon="fas fa-history">Riwayat Diagnosis</x-admin.sidebar-link>
         </x-admin.sidebar-section>
 

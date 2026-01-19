@@ -17,7 +17,9 @@ class Diagnosis extends Component
 {
     // User input
     public string $nama = '';
-    public int $currentStep = 1; // 1 = nama input, 2 = gejala selection, 3 = results
+    public string $alamat = '';
+    public string $telepon = '';
+    public int $currentStep = 1; // 1 = user info input, 2 = gejala selection, 3 = results
 
     public array $selectedGejala = [];
     public array $results = [];
@@ -34,25 +36,34 @@ class Diagnosis extends Component
     }
 
     /**
-     * Proceed to symptom selection step after entering name
+     * Proceed to symptom selection step after entering user info
      */
     public function proceedToSymptoms(): void
     {
         $this->validate([
             'nama' => ['required', 'string', 'min:2', 'max:100'],
+            'alamat' => ['required', 'string', 'min:5', 'max:255'],
+            'telepon' => ['required', 'string', 'min:10', 'max:20', 'regex:/^[0-9+\-\s]+$/'],
         ], [
             'nama.required' => 'Nama wajib diisi.',
             'nama.min' => 'Nama minimal 2 karakter.',
             'nama.max' => 'Nama maksimal 100 karakter.',
+            'alamat.required' => 'Alamat wajib diisi.',
+            'alamat.min' => 'Alamat minimal 5 karakter.',
+            'alamat.max' => 'Alamat maksimal 255 karakter.',
+            'telepon.required' => 'Nomor telepon wajib diisi.',
+            'telepon.min' => 'Nomor telepon minimal 10 digit.',
+            'telepon.max' => 'Nomor telepon maksimal 20 digit.',
+            'telepon.regex' => 'Format nomor telepon tidak valid.',
         ]);
 
         $this->currentStep = 2;
     }
 
     /**
-     * Go back to name input step
+     * Go back to user info input step
      */
-    public function backToNameInput(): void
+    public function backToUserInfo(): void
     {
         $this->currentStep = 1;
     }
@@ -125,6 +136,8 @@ class Diagnosis extends Component
         $riwayat = RiwayatDiagnosa::create([
             'tanggal' => now()->toDateString(),
             'nama' => $namaUser,
+            'alamat' => $this->alamat,
+            'telepon' => $this->telepon,
             'id_penyakit' => $this->topResult['penyakit']->id,
         ]);
 
@@ -164,11 +177,13 @@ class Diagnosis extends Component
     }
 
     /**
-     * Start over completely (including name)
+     * Start over completely (including user info)
      */
     public function startOver(): void
     {
         $this->nama = '';
+        $this->alamat = '';
+        $this->telepon = '';
         $this->selectedGejala = [];
         $this->results = [];
         $this->topResult = null;
