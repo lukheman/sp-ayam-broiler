@@ -9,16 +9,16 @@ class GejalaSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('gejala')->insert([
-            ['kode_gejala' => 'G01',  'nama_gejala' => 'Nafsu makan berkurang'],
-            ['kode_gejala' => 'G02',  'nama_gejala' => 'Nafas sesak/megap-megap'],
-            ['kode_gejala' => 'G03',  'nama_gejala' => 'Nafas ngorok'],
-            ['kode_gejala' => 'G04',  'nama_gejala' => 'Nafas cepat'],
-            ['kode_gejala' => 'G05',  'nama_gejala' => 'Bersin-bersin'],
-            ['kode_gejala' => 'G06',  'nama_gejala' => 'Batuk'],
-            ['kode_gejala' => 'G07',  'nama_gejala' => 'Badan kurus'],
-            ['kode_gejala' => 'G08',  'nama_gejala' => 'Lesu'],
-            ['kode_gejala' => 'G09',  'nama_gejala' => 'Bulu kusam dan berkerut'],
+        $data = [
+            ['kode_gejala' => 'G01', 'nama_gejala' => 'Nafsu makan berkurang'],
+            ['kode_gejala' => 'G02', 'nama_gejala' => 'Nafas sesak/megap-megap'],
+            ['kode_gejala' => 'G03', 'nama_gejala' => 'Nafas ngorok'],
+            ['kode_gejala' => 'G04', 'nama_gejala' => 'Nafas cepat'],
+            ['kode_gejala' => 'G05', 'nama_gejala' => 'Bersin-bersin'],
+            ['kode_gejala' => 'G06', 'nama_gejala' => 'Batuk'],
+            ['kode_gejala' => 'G07', 'nama_gejala' => 'Badan kurus'],
+            ['kode_gejala' => 'G08', 'nama_gejala' => 'Lesu'],
+            ['kode_gejala' => 'G09', 'nama_gejala' => 'Bulu kusam dan berkerut'],
             ['kode_gejala' => 'G10', 'nama_gejala' => 'Diare'],
             ['kode_gejala' => 'G11', 'nama_gejala' => 'Bulu berdiri'],
             ['kode_gejala' => 'G12', 'nama_gejala' => 'Kelihatan ngantuk'],
@@ -59,6 +59,13 @@ class GejalaSeeder extends Seeder
             ['kode_gejala' => 'G47', 'nama_gejala' => 'Kotoran putih seperti kapur'],
             ['kode_gejala' => 'G48', 'nama_gejala' => 'Lemah gemetar'],
             ['kode_gejala' => 'G49', 'nama_gejala' => 'Mati secara mendadak / sayap menggantung'],
-        ]);
+        ];
+
+        foreach ($data as $item) {
+            DB::table('gejala')->updateOrInsert(
+                ['kode_gejala' => $item['kode_gejala']],
+                $item
+            );
+        }
     }
 }

@@ -9,7 +9,7 @@ class PenyakitSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('penyakit')->insert([
+        $data = [
             ['kode_penyakit' => 'P01', 'nama_penyakit' => 'Berak Kapur (Pullorum Disease)'],
             ['kode_penyakit' => 'P02', 'nama_penyakit' => 'Kolera Ayam (Fowl Cholera)'],
             ['kode_penyakit' => 'P03', 'nama_penyakit' => 'Flu Burung (Avian Influenza)'],
@@ -25,6 +25,13 @@ class PenyakitSeeder extends Seeder
             ['kode_penyakit' => 'P13', 'nama_penyakit' => 'Malaria Unggas'],
             ['kode_penyakit' => 'P14', 'nama_penyakit' => 'Snot'],
             ['kode_penyakit' => 'P15', 'nama_penyakit' => 'Chronic Respiratory Disease'],
-        ]);
+        ];
+
+        foreach ($data as $item) {
+            DB::table('penyakit')->updateOrInsert(
+                ['kode_penyakit' => $item['kode_penyakit']],
+                $item
+            );
+        }
     }
 }

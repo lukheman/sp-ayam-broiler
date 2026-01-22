@@ -15,11 +15,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'nama' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => 'password123'
-        ]);
+        // Buat user admin jika belum ada
+        User::firstOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'nama' => 'Admin',
+                'password' => bcrypt('password123'),
+            ]
+        );
 
         $this->call([
             PenyakitSeeder::class,
