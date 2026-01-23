@@ -281,6 +281,14 @@
                                         </div>
                                     </div>
 
+                                    {{-- Solusi/Penanganan --}}
+                                    @if($result['penyakit']->solusi)
+                                        <div class="disease-solution">
+                                            <strong><i class="fas fa-lightbulb me-1"></i>Solusi/Penanganan:</strong>
+                                            <p class="solution-text">{{ $result['penyakit']->solusi }}</p>
+                                        </div>
+                                    @endif
+
                                     {{-- Calculation Details Toggle --}}
                                     @if($calculation)
                                         <div class="calc-toggle-section">
@@ -918,6 +926,28 @@
             border-radius: 6px;
             font-size: 0.8rem;
             font-weight: 600;
+        }
+
+        .disease-solution {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 10px;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .disease-solution strong {
+            color: #b45309;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .disease-solution .solution-text {
+            color: #92400e;
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre-line;
         }
 
         .no-results {

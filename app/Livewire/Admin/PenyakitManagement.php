@@ -22,6 +22,7 @@ class PenyakitManagement extends Component
     // Form fields
     public string $kode_penyakit = '';
     public string $nama_penyakit = '';
+    public string $solusi = '';
 
     // State
     public ?int $editingId = null;
@@ -34,6 +35,7 @@ class PenyakitManagement extends Component
         $rules = [
             'kode_penyakit' => ['required', 'string', 'max:10'],
             'nama_penyakit' => ['required', 'string', 'max:255'],
+            'solusi' => ['nullable', 'string'],
         ];
 
         if ($this->editingId) {
@@ -63,6 +65,7 @@ class PenyakitManagement extends Component
         $this->editingId = $id;
         $this->kode_penyakit = $penyakit->kode_penyakit;
         $this->nama_penyakit = $penyakit->nama_penyakit;
+        $this->solusi = $penyakit->solusi ?? '';
         $this->showModal = true;
     }
 
@@ -116,6 +119,7 @@ class PenyakitManagement extends Component
     {
         $this->kode_penyakit = '';
         $this->nama_penyakit = '';
+        $this->solusi = '';
         $this->editingId = null;
     }
 

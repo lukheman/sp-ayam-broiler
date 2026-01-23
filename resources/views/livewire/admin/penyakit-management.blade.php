@@ -42,6 +42,7 @@
                     <tr>
                         <th style="width: 100px;">Kode</th>
                         <th>Nama Penyakit</th>
+                        <th>Solusi</th>
                         <th style="width: 150px;">Jumlah Gejala</th>
                         <th style="width: 120px;">Aksi</th>
                     </tr>
@@ -53,6 +54,13 @@
                                 <x-admin.badge variant="secondary">{{ $penyakit->kode_penyakit }}</x-admin.badge>
                             </td>
                             <td style="color: var(--text-primary);">{{ $penyakit->nama_penyakit }}</td>
+                            <td style="color: var(--text-secondary); max-width: 300px;">
+                                @if($penyakit->solusi)
+                                    {{ Str::limit($penyakit->solusi, 80) }}
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
                             <td>
                                 <span class="text-muted">{{ $penyakit->gejala_count ?? $penyakit->gejala()->count() }}
                                     gejala</span>
@@ -72,7 +80,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center py-4">
+                            <td colspan="5" class="text-center py-4">
                                 <div class="text-muted">
                                     <i class="fas fa-virus mb-2" style="font-size: 2rem;"></i>
                                     <p class="mb-0">Belum ada data penyakit</p>
@@ -116,12 +124,21 @@
                         @enderror
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label for="nama_penyakit" class="form-label">Nama Penyakit <span
                                 style="color: var(--danger-color);">*</span></label>
                         <input type="text" class="form-control @error('nama_penyakit') is-invalid @enderror"
                             id="nama_penyakit" wire:model="nama_penyakit" placeholder="Masukkan nama penyakit">
                         @error('nama_penyakit')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="solusi" class="form-label">Solusi</label>
+                        <textarea class="form-control @error('solusi') is-invalid @enderror" id="solusi" wire:model="solusi"
+                            placeholder="Masukkan solusi/penanganan penyakit" rows="4"></textarea>
+                        @error('solusi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

@@ -24,6 +24,7 @@ class PenyakitFactory extends Factory
         return [
             'kode_penyakit' => 'P' . str_pad($counter++, 3, '0', STR_PAD_LEFT),
             'nama_penyakit' => fake()->sentence(3),
+            'solusi' => fake()->optional(0.8)->paragraph(2),
         ];
     }
 }

@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('kode_penyakit')->unique();
             $table->string('nama_penyakit');
+            $table->text('solusi')->nullable();
             $table->timestamps();
         });
     }
