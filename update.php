@@ -283,20 +283,34 @@ if ($hashSebelum === $hashSesudah) {
 }
 
 // =============================================================================
-// LANGKAH 3: UPDATE DEPENDENCIES COMPOSER
+// LANGKAH 3: UPDATE DEPENDENCIES COMPOSER (JIKA ADA PERUBAHAN)
 // =============================================================================
 
 cetakLangkah(3, "Update Dependencies Composer");
 
-// Selalu jalankan composer install untuk memastikan dependencies konsisten
-cetakInfo("Menjalankan composer install...");
+// Cek apakah ada perubahan pada composer.json atau composer.lock
+$composerUpdated = false;
+if ($hashSebelum !== $hashSesudah) {
+    // Ada update dari git pull, cek apakah composer files berubah
+    $changedFiles = dapatkanOutput("git diff --name-only {$hashSebelum} {$hashSesudah}");
 
-if (!jalankanCommand("composer install --no-interaction --optimize-autoloader")) {
-    cetakError("Composer install gagal!");
-    exit(1);
+    if (str_contains($changedFiles, 'composer.json') || str_contains($changedFiles, 'composer.lock')) {
+        cetakInfo("Terdeteksi perubahan pada composer.json/composer.lock");
+        cetakInfo("Menjalankan composer install...");
+
+        if (!jalankanCommand("composer install --no-interaction --optimize-autoloader")) {
+            cetakError("Composer install gagal!");
+            exit(1);
+        }
+
+        $composerUpdated = true;
+        cetakSukses("Dependencies Composer berhasil diupdate!");
+    } else {
+        cetakSukses("Tidak ada perubahan dependencies, melewati composer install.");
+    }
+} else {
+    cetakSukses("Tidak ada update, melewati composer install.");
 }
-
-cetakSukses("Dependencies Composer berhasil diupdate!");
 
 // =============================================================================
 // LANGKAH 4: MIGRASI DATABASE
@@ -375,9 +389,10 @@ cetakInfo("Project berhasil diupdate ke versi terbaru!");
 cetakPesan("");
 
 // Ringkasan
+$composerStatus = $composerUpdated ? "Selesai" : "Dilewati (tidak ada perubahan)";
 cetakPesan("  Ringkasan Update:", Warna::TEBAL . Warna::CYAN);
 cetakPesan("  ├─ Git Pull: Selesai", Warna::CYAN);
-cetakPesan("  ├─ Composer Install: Selesai", Warna::CYAN);
+cetakPesan("  ├─ Composer Install: {$composerStatus}", Warna::CYAN);
 cetakPesan("  ├─ Database Migration: Selesai", Warna::CYAN);
 cetakPesan("  ├─ Clear Cache: Selesai", Warna::CYAN);
 cetakPesan("  └─ Optimasi: Selesai", Warna::CYAN);
