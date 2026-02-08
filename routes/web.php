@@ -35,7 +35,21 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     // Print Routes
     Route::get('/print/diagnosis/{id}', function ($id) {
         $riwayat = \App\Models\RiwayatDiagnosa::with(['penyakit', 'gejala'])->findOrFail($id);
-        return view('print.diagnosis-report', compact('riwayat'));
+
+        // Get gejala IDs from riwayat
+        $gejalaIds = $riwayat->gejala->pluck('id')->toArray();
+
+        // Calculate Bayes theorem for print report
+        $bayesService = app(\App\Services\BayesTheoremService::class);
+        $diagnosisData = $bayesService->diagnose($gejalaIds);
+
+        // Get calculation steps for the diagnosed disease
+        $calculationSteps = collect($diagnosisData['calculation_steps'])
+            ->firstWhere('penyakit_id', $riwayat->id_penyakit);
+
+        $calculationSummary = $diagnosisData['summary'];
+
+        return view('print.diagnosis-report', compact('riwayat', 'calculationSteps', 'calculationSummary'));
     })->name('admin.print.diagnosis');
 
     Route::get('/print/diagnosis-summary', function () {
