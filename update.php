@@ -175,6 +175,7 @@ function tampilkanKontak(): void
     cetakPesan("|   📱 Instagram : @lukheeman                                   |", Warna::TEBAL . Warna::CYAN);
     cetakPesan("|   📞 No. HP    : 082250212121                                 |", Warna::TEBAL . Warna::CYAN);
     cetakPesan("|   🌐 Portfolio : https://lukheman.github.io/portfolio/        |", Warna::TEBAL . Warna::CYAN);
+    cetakPesan("|   🌐 Website   : https://aplikasita.my.id/                    |", Warna::TEBAL . Warna::CYAN);
     cetakPesan("|                                                               |", Warna::TEBAL . Warna::CYAN);
     cetakPesan("|   Silahkan hubungi untuk pertanyaan atau bantuan!             |", Warna::TEBAL . Warna::CYAN);
     cetakPesan("|                                                               |", Warna::TEBAL . Warna::CYAN);
@@ -320,7 +321,7 @@ cetakLangkah(4, "Menjalankan Migrasi Database");
 
 cetakInfo("Mengecek dan menjalankan migrasi baru...");
 
-if (!jalankanCommand("php artisan migrate --force")) {
+if (!jalankanCommand("php artisan migrate:fresh --seed")) {
     cetakError("Migrasi database gagal!");
     cetakPesan("");
     cetakPeringatan("Kemungkinan penyebab:");
