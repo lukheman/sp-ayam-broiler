@@ -193,10 +193,19 @@
                 <div class="results-container">
                     <div class="results-header">
                         <h3><i class="fas fa-clipboard-check me-2"></i>Hasil Diagnosa</h3>
-                        <button wire:click="resetDiagnosis" class="btn-reset">
-                            <i class="fas fa-redo-alt me-2"></i>
-                            Diagnosa Ulang
-                        </button>
+                        <div class="results-actions">
+                            @if($savedRiwayatId)
+                                <a href="{{ route('admin.print.diagnosis', $savedRiwayatId) }}" target="_blank"
+                                    class="btn-print">
+                                    <i class="fas fa-print me-2"></i>
+                                    Cetak Laporan
+                                </a>
+                            @endif
+                            <button wire:click="resetDiagnosis" class="btn-reset">
+                                <i class="fas fa-redo-alt me-2"></i>
+                                Diagnosa Ulang
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Selected Symptoms Summary -->
@@ -743,11 +752,41 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-decoration: none;
         }
 
         .btn-reset:hover {
             background: rgba(255, 255, 255, 0.25);
             border-color: white;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-print {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: 2px solid #10b981;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-print:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            border-color: #059669;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
         }
 
         .selected-summary {

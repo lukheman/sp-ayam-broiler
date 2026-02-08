@@ -24,6 +24,7 @@ class Diagnosis extends Component
     public array $selectedGejala = [];
     public array $results = [];
     public bool $showResults = false;
+    public ?int $savedRiwayatId = null;
     public ?array $topResult = null;
     public array $calculationSteps = [];
     public ?array $calculationSummary = null;
@@ -141,6 +142,9 @@ class Diagnosis extends Component
             'id_penyakit' => $this->topResult['penyakit']->id,
         ]);
 
+        // Save the riwayat ID for print button
+        $this->savedRiwayatId = $riwayat->id;
+
         // Save selected gejala to riwayat
         foreach ($gejalaIds as $gejalaId) {
             RiwayatDiagnosaGejala::create([
@@ -170,6 +174,7 @@ class Diagnosis extends Component
         $this->selectedGejala = [];
         $this->results = [];
         $this->topResult = null;
+        $this->savedRiwayatId = null;
         $this->calculationSteps = [];
         $this->calculationSummary = null;
         $this->showResults = false;
@@ -187,6 +192,7 @@ class Diagnosis extends Component
         $this->selectedGejala = [];
         $this->results = [];
         $this->topResult = null;
+        $this->savedRiwayatId = null;
         $this->calculationSteps = [];
         $this->calculationSummary = null;
         $this->showResults = false;
