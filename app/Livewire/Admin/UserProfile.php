@@ -38,7 +38,7 @@ class UserProfile extends Component
     {
         return [
             'nama' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . Auth::id()],
+            'email' => ['required', 'email', 'max:255', 'unique:pengguna,email,' . Auth::id()],
         ];
     }
 

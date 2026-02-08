@@ -41,12 +41,12 @@ class UserManagement extends Component
         ];
 
         if ($this->editingUserId) {
-            $rules['email'][] = 'unique:users,email,' . $this->editingUserId;
+            $rules['email'][] = 'unique:pengguna,email,' . $this->editingUserId;
             if ($this->password) {
                 $rules['password'] = ['confirmed', Password::defaults()];
             }
         } else {
-            $rules['email'][] = 'unique:users,email';
+            $rules['email'][] = 'unique:pengguna,email';
             $rules['password'] = ['required', 'confirmed', Password::defaults()];
         }
 
